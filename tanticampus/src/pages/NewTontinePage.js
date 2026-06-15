@@ -34,7 +34,7 @@ const CreateTontinePage = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/tontine/create', {
+      const response = await fetch('http://localhost:8030/api/tontine/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

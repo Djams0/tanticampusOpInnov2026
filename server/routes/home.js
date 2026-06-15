@@ -4,7 +4,7 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Endpoint pour récupérer les informations du tableau de bord http://localhost:3000/api
+// Endpoint pour récupérer les informations du tableau de bord http://localhost:8030/api
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;

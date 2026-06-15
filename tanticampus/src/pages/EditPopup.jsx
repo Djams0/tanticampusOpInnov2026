@@ -31,7 +31,7 @@ const EditPopup = ({ field, onClose, onSave }) => {
       const payload = {};
       payload[field.field] = inputValue;
 
-      await axios.put("http://localhost:3000/api/user/profile", payload, {
+      await axios.put("http://localhost:8030/api/user/profile", payload, {
         headers: {
           Authorization: `Bearer ${token}`
         }

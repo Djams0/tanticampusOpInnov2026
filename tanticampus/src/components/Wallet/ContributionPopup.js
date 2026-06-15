@@ -12,7 +12,7 @@ const ContributionPopup = ({ onClose }) => {
 
   const fetchTontines = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/wallet/contributions', {
+      const res = await fetch('http://localhost:8030/api/wallet/contributions', {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -26,7 +26,7 @@ const ContributionPopup = ({ onClose }) => {
   const handlePay = async () => {
     if (!selectedId) return setError("Veuillez sélectionner une cotisation.");
     try {
-      const res = await fetch('http://localhost:3000/api/wallet/pay-contribution', {
+      const res = await fetch('http://localhost:8030/api/wallet/pay-contribution', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -7,7 +7,7 @@ const DepositPopup = ({ onClose }) => {
 
   const handleDeposit = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/wallet/deposit', {
+      const res = await fetch('http://localhost:8030/api/wallet/deposit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ const TontinePage = () => {
     const fetchTontineData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:3000/api/tontine-details/${id}`, {
+        const response = await fetch(`http://localhost:8030/api/tontine-details/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -54,7 +54,7 @@ const TontinePage = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:3000/api/tontine-details/send-group-message', {
+      const response = await fetch('http://localhost:8030/api/tontine-details/send-group-message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const TontinePage = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:3000/api/tontine-details/warn-participant', {
+      const response = await fetch('http://localhost:8030/api/tontine-details/warn-participant', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ const TontinePage = () => {
   const handleRequest = async (requestId, action) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:3000/api/tontine-details/handle-request', {
+      const response = await fetch('http://localhost:8030/api/tontine-details/handle-request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const TontinePage = () => {
       }
 
       // Refresh tontine data
-      const updatedResponse = await fetch(`http://localhost:3000/api/tontine-details/${id}`, {
+      const updatedResponse = await fetch(`http://localhost:8030/api/tontine-details/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -155,7 +155,7 @@ const TontinePage = () => {
   const updateBeneficiaryOrder = async (newOrder) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:3000/api/tontine-details/update-beneficiary-order', {
+      const response = await fetch('http://localhost:8030/api/tontine-details/update-beneficiary-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ const TontinePage = () => {
       }
 
       // Refresh tontine data
-      const updatedResponse = await fetch(`http://localhost:3000/api/tontine-details/${id}`, {
+      const updatedResponse = await fetch(`http://localhost:8030/api/tontine-details/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -188,7 +188,7 @@ const TontinePage = () => {
   const removeParticipant = async (userId) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:3000/api/tontine-details/remove-participant', {
+      const response = await fetch('http://localhost:8030/api/tontine-details/remove-participant', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -205,7 +205,7 @@ const TontinePage = () => {
       }
 
       // Refresh tontine data
-      const updatedResponse = await fetch(`http://localhost:3000/api/tontine-details/${id}`, {
+      const updatedResponse = await fetch(`http://localhost:8030/api/tontine-details/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -222,7 +222,7 @@ const TontinePage = () => {
     const fetchMessages = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:3000/api/tontine-details/group-messages/${id}`, {
+        const response = await fetch(`http://localhost:8030/api/tontine-details/group-messages/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

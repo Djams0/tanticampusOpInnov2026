@@ -33,7 +33,7 @@ const HomePage = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:3000/api', {
+        const response = await axios.get('http://localhost:8030/api', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -76,7 +76,7 @@ const HomePage = () => {
         return;
       }
 
-      const response = await axios.post('http://localhost:3000/api/import-tontine/join', {
+      const response = await axios.post('http://localhost:8030/api/import-tontine/join', {
         tontine_code: tontineCode
       }, {
         headers: {

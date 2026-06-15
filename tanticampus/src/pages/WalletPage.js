@@ -20,7 +20,7 @@ const WalletPage = () => {
 
   const fetchWalletInfo = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/wallet', {
+      const res = await fetch('http://localhost:8030/api/wallet', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw await res.json();
@@ -33,7 +33,7 @@ const WalletPage = () => {
 
   const fetchTransactions = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/wallet/transactions', {
+      const res = await fetch('http://localhost:8030/api/wallet/transactions', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw await res.json();

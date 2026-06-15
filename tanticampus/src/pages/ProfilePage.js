@@ -23,7 +23,7 @@ const ProfilePage = () => {
           return;
         }
 
-        const response = await axios.get("http://localhost:3000/api/user/profile", {
+        const response = await axios.get("http://localhost:8030/api/user/profile", {
           headers: {
             Authorization: `Bearer ${token}`
           }
