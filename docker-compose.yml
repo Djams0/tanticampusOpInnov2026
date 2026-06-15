@@ -1,0 +1,44 @@
+services:
+  front:
+    build: ./tanticampus
+    container_name: tanticampus_front
+    ports:
+      - "3030:80"
+    depends_on:
+      - api
+    restart: always
+
+  api:
+    build: ./server
+    container_name: tanticampus_api
+    ports:
+      - "8030:8030"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5433
+      - DB_NAME=tanticampus
+      - DB_USER=tanticampus_user
+      - DB_PASSWORD=1234
+      - JWT_SECRET=supersecretkey
+    depends_on:
+      - db
+    volumes:
+      - ./platform/front/app:/app/frontend
+    restart: always
+
+  db:
+    image: postgres:15
+    container_name: tanticampus_db
+    environment:
+      POSTGRES_USER: tanticampus_user
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: tanticampus
+    restart: always
+    ports:
+      - "5433:5433"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+
+volumes:
+  db_data:
