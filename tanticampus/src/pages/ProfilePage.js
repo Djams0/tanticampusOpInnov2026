@@ -7,6 +7,7 @@ import {
 import { MdVerifiedUser, MdScore } from "react-icons/md";
 import EditPopup from "./EditPopup";
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
@@ -19,11 +20,11 @@ const ProfilePage = () => {
       try {
         const token = localStorage.getItem("authToken");
         if (!token) {
-          setError("Erreur 401 : Aucun token d'authentification trouvé.");
+          setError("Erreur 401 : aucun token d'authentification trouve.");
           return;
         }
 
-        const response = await axios.get("http://localhost:8030/api/user/profile", {
+        const response = await axios.get(`${API_BASE_URL}/api/user/profile`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -31,11 +32,11 @@ const ProfilePage = () => {
 
         setUserData(response.data);
       } catch (err) {
-        console.error("Erreur lors de la récupération du profil :", err);
+        console.error("Erreur lors de la recuperation du profil :", err);
         if (err.response) {
           setError(`Erreur ${err.response.status} : ${err.response.data.error || "Erreur inconnue du serveur."}`);
         } else if (err.request) {
-          setError("Erreur réseau : aucune réponse du serveur.");
+          setError("Erreur reseau : aucune reponse du serveur.");
         } else {
           setError(`Erreur : ${err.message}`);
         }
@@ -61,15 +62,15 @@ const ProfilePage = () => {
   };
 
   const fieldConfig = [
-    { label: "Prénom", icon: <FaUser />, key: "firstName", editable: true },
+    { label: "Prenom", icon: <FaUser />, key: "firstName", editable: true },
     { label: "Nom", icon: <FaUser />, key: "lastName", editable: true },
     { label: "Email", icon: <FaEnvelope />, key: "email", editable: false },
     { label: "Mot de passe", icon: <FaCheck />, key: "password", value: "********", editable: true },
-    { label: "Téléphone", icon: <FaPhone />, key: "phoneNumber", editable: true },
+    { label: "Telephone", icon: <FaPhone />, key: "phoneNumber", editable: true },
     { label: "Date de naissance", icon: <FaBirthdayCake />, key: "dateOfBirth", editable: true },
-    { label: "Université", icon: <FaUniversity />, key: "university", editable: true },
-    { label: "ID étudiant", icon: <FaIdCard />, key: "studentId", editable: true },
-    { label: "Vérifié", icon: <MdVerifiedUser />, key: "isVerified", editable: false },
+    { label: "Universite", icon: <FaUniversity />, key: "university", editable: true },
+    { label: "ID etudiant", icon: <FaIdCard />, key: "studentId", editable: true },
+    { label: "Verifie", icon: <MdVerifiedUser />, key: "isVerified", editable: false },
     { label: "Score de confiance", icon: <MdScore />, key: "trustScore", editable: false },
     { label: "Solde", icon: <FaCheck />, key: "walletBalance", editable: false }
   ];
@@ -103,7 +104,7 @@ const ProfilePage = () => {
         {fieldConfig.map((field, index) => {
           const value = field.key === "password"
             ? field.value
-            : userData[field.key] ?? "Non renseigné";
+            : userData[field.key] ?? "Non renseigne";
 
           return (
             <div key={index} className="menu-item">
@@ -129,16 +130,17 @@ const ProfilePage = () => {
         <EditPopup
           field={selectedField}
           onClose={handleClose}
-          onSave={(newValue) => {
-            console.log("Sauvegarde :", selectedField.field, "→", newValue);
-            // À remplacer par un PUT API call
+          onSave={(updatedUser) => {
+            if (updatedUser) {
+              setUserData(updatedUser);
+            }
             handleClose();
           }}
         />
       )}
 
       <button className="logout-button" onClick={handleLogout}>
-        Déconnexion
+        Deconnexion
       </button>
     </div>
   );

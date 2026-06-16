@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({
@@ -33,7 +34,7 @@ const HomePage = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:8030/api', {
+        const response = await axios.get(`${API_BASE_URL}/api`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -76,7 +77,7 @@ const HomePage = () => {
         return;
       }
 
-      const response = await axios.post('http://localhost:8030/api/import-tontine/join', {
+      await axios.post(`${API_BASE_URL}/api/import-tontine/join`, {
         tontine_code: tontineCode
       }, {
         headers: {
@@ -149,7 +150,7 @@ const HomePage = () => {
               </svg>
             </div>
           )}
-          <Link to="/Profile" className="details-link">Mon profil</Link>
+          <Link to="/profile" className="details-link">Mon profil</Link>
         </div>
       </div>
 
@@ -167,7 +168,7 @@ const HomePage = () => {
           <div className="box dark">
             <p className="box-title">Mon Wallet</p>
             <p className="wallet-amount">{walletBalance.toFixed(2)}€</p>
-            <Link to="/Wallet" className="details-link">Voir les détails</Link>
+            <Link to="/wallet" className="details-link">Voir les détails</Link>
           </div>
         </div>
       </div>

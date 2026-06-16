@@ -11,11 +11,16 @@ const notifRoutes = require('./routes/notif');
 
 const app = express();
 
-// Middleware globaux
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*',
+  credentials: true
+}));
 app.use(express.json());
 
-// Routes
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', service: 'tonticampus-api' });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api', homeRoutes);
 app.use('/api/tontine', tontineRoutes);
@@ -25,8 +30,16 @@ app.use('/api/tontine-details', tontineDetailsRoutes);
 app.use('/api/import-tontine', importTontineRoutes);
 app.use('/api/notifications', notifRoutes);
 
-// Lancement du serveur
-const PORT = process.env.PORT || 3000;
+app.use((req, res) => {
+  res.status(404).json({ error: 'Route introuvable' });
+});
+
+app.use((err, req, res, next) => {
+  console.error('Erreur non geree:', err);
+  res.status(500).json({ error: 'Erreur serveur' });
+});
+
+const PORT = process.env.PORT || 8030;
 app.listen(PORT, () => {
-  console.log(`Serveur TontiCampus lancé sur le port ${PORT}`);
+  console.log(`Serveur TontiCampus lance sur le port ${PORT}`);
 });

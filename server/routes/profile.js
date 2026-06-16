@@ -34,7 +34,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
         user_id, first_name, last_name, email, phone_number, 
         date_of_birth, university, student_id, is_verified, 
         trust_score, wallet_balance
-       FROM Users 
+       FROM users 
        WHERE user_id = ?`,
       [userId]
     );
@@ -82,7 +82,7 @@ router.put(
 
     try {
       // Vérifier si l'utilisateur existe
-      const [userRows] = await db.query('SELECT 1 FROM Users WHERE user_id = ?', [userId]);
+      const [userRows] = await db.query('SELECT 1 FROM users WHERE user_id = ?', [userId]);
       if (userRows.length === 0) {
         return res.status(404).json({ error: 'Utilisateur non trouvé' });
       }
@@ -90,7 +90,7 @@ router.put(
       // Vérifier si le nouveau studentId est déjà utilisé
       if (studentId) {
         const [existing] = await db.query(
-          'SELECT 1 FROM Users WHERE student_id = ? AND user_id != ?',
+          'SELECT 1 FROM users WHERE student_id = ? AND user_id != ?',
           [studentId, userId]
         );
         if (existing.length > 0) {
@@ -125,7 +125,7 @@ router.put(
         const values = [...Object.values(updates), userId];
 
         await db.query(
-          `UPDATE Users SET ${setClause} WHERE user_id = ?`,
+          `UPDATE users SET ${setClause} WHERE user_id = ?`,
           values
         );
       }
@@ -136,7 +136,7 @@ router.put(
           user_id, first_name, last_name, email, phone_number, 
           date_of_birth, university, student_id, is_verified, 
           trust_score, wallet_balance
-         FROM Users 
+         FROM users 
          WHERE user_id = ?`,
         [userId]
       );

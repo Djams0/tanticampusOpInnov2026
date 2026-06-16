@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FaRocket, FaDatabase } from 'react-icons/fa';
 import './NotificationsPage.css';
+import API_BASE_URL from '../config/api';
 
 const iconMap = {
-  warning: <FaDatabase />,   // mappe le type 'warning' vers l'icône correspondante
+  warning: <FaDatabase />,
   reminder: <FaDatabase />,
   system: <FaRocket />,
   group_message: <FaRocket />,
@@ -13,27 +14,26 @@ const iconMap = {
 const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    // Remplace l'URL par celle de ton API réelle
-    fetch('/api/notifications', {
+    fetch(`${API_BASE_URL}/api/notifications`, {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token') // ou autre stockage du token
+        Authorization: 'Bearer ' + localStorage.getItem('authToken')
       }
     })
       .then(res => res.json())
       .then(data => {
-        if(data.success) {
+        if (data.success) {
           setNotifications(data.data);
         } else {
-          console.error('Erreur API notifications:', data.message);
+          setError(data.message || 'Erreur lors du chargement des notifications');
         }
-        setLoading(false);
       })
-      .catch(err => {
-        console.error('Erreur réseau:', err);
-        setLoading(false);
-      });
+      .catch(() => {
+        setError('Erreur reseau lors du chargement des notifications');
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <p>Chargement des notifications...</p>;
@@ -44,6 +44,8 @@ const NotificationsPage = () => {
         <h2>Notifications</h2>
         <p className="notifications-count">{notifications.length} notifications</p>
       </header>
+
+      {error && <p className="error-message">{error}</p>}
 
       <section className="notifications-list">
         {notifications.map((notif) => (

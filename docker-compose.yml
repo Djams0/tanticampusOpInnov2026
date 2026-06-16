@@ -15,29 +15,29 @@ services:
       - "8030:8030"
     environment:
       - DB_HOST=db
-      - DB_PORT=5433
-      - DB_NAME=tanticampus
+      - DB_PORT=3306
+      - DB_NAME=tanticampus25
       - DB_USER=tanticampus_user
       - DB_PASSWORD=1234
       - JWT_SECRET=supersecretkey
+      - PORT=8030
     depends_on:
       - db
-    volumes:
-      - ./platform/front/app:/app/frontend
     restart: always
 
   db:
-    image: postgres:15
+    image: mysql:8.4
     container_name: tanticampus_db
     environment:
-      POSTGRES_USER: tanticampus_user
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: tanticampus
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tanticampus25
+      MYSQL_USER: tanticampus_user
+      MYSQL_PASSWORD: 1234
     restart: always
     ports:
-      - "5433:5433"
+      - "3306:3306"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d
 
 volumes:

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import API_BASE_URL from '../../config/api';
 
 const ContributionPopup = ({ onClose }) => {
   const [tontines, setTontines] = useState([]);
@@ -6,13 +7,9 @@ const ContributionPopup = ({ onClose }) => {
   const [error, setError] = useState('');
   const token = localStorage.getItem('authToken');
 
-  useEffect(() => {
-    fetchTontines();
-  }, []);
-
-  const fetchTontines = async () => {
+  const fetchTontines = useCallback(async () => {
     try {
-      const res = await fetch('http://localhost:8030/api/wallet/contributions', {
+      const res = await fetch(`${API_BASE_URL}/api/wallet/contributions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -21,18 +18,22 @@ const ContributionPopup = ({ onClose }) => {
     } catch (err) {
       setError(err.error || 'Erreur lors du chargement des cotisations');
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchTontines();
+  }, [fetchTontines]);
 
   const handlePay = async () => {
     if (!selectedId) return setError("Veuillez sélectionner une cotisation.");
     try {
-      const res = await fetch('http://localhost:8030/api/wallet/pay-contribution', {
+      const res = await fetch(`${API_BASE_URL}/api/wallet/pay-contribution`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ tontineId: selectedId })
+        body: JSON.stringify({ tontine_id: selectedId })
       });
 
       const data = await res.json();

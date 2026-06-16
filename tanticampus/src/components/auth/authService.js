@@ -1,7 +1,7 @@
-const API_URL = 'http://localhost:8030';
+import API_BASE_URL from '../../config/api';
 
 export const register = async (userData) => {
-  const response = await fetch(`${API_URL}/api/auth/register`, {
+  const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export const register = async (userData) => {
 };
 
 export const login = async (credentials) => {
-  const response = await fetch(`${API_URL}/api/auth/login`, {
+  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export const verifyToken = async () => {
   if (!token) return false;
 
   try {
-    const response = await fetch(`${API_URL}/api/auth/verify`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/verify`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

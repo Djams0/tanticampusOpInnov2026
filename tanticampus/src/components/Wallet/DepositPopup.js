@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import API_BASE_URL from '../../config/api';
 
 const DepositPopup = ({ onClose }) => {
   const [amount, setAmount] = useState('');
@@ -7,7 +8,7 @@ const DepositPopup = ({ onClose }) => {
 
   const handleDeposit = async () => {
     try {
-      const res = await fetch('http://localhost:8030/api/wallet/deposit', {
+      const res = await fetch(`${API_BASE_URL}/api/wallet/deposit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

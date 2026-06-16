@@ -11,7 +11,7 @@ router.get('/', authenticateToken, async (req, res) => {
 
     // 1. Récupérer le prénom et le solde de l'utilisateur
     const [[user]] = await db.query(
-      'SELECT first_name, wallet_balance FROM Users WHERE user_id = ?',
+      'SELECT first_name, wallet_balance FROM users WHERE user_id = ?',
       [userId]
     );
 

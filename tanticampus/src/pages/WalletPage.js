@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './WalletPage.css';
 import DepositPopup from '../components/Wallet/DepositPopup';
 import WithdrawPopup from '../components/Wallet/WithdrawPopup';
 import ContributionPopup from '../components/Wallet/ContributionPopup';
+import API_BASE_URL from '../config/api';
 
 const WalletPage = () => {
   const [balance, setBalance] = useState(0);
@@ -13,14 +14,9 @@ const WalletPage = () => {
 
   const token = localStorage.getItem('authToken');
 
-  useEffect(() => {
-    fetchWalletInfo();
-    fetchTransactions();
-  }, []);
-
-  const fetchWalletInfo = async () => {
+  const fetchWalletInfo = useCallback(async () => {
     try {
-      const res = await fetch('http://localhost:8030/api/wallet', {
+      const res = await fetch(`${API_BASE_URL}/api/wallet`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw await res.json();
@@ -29,11 +25,11 @@ const WalletPage = () => {
     } catch (err) {
       alert('Erreur chargement solde : ' + (err.error || 'inconnue'));
     }
-  };
+  }, [token]);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
-      const res = await fetch('http://localhost:8030/api/wallet/transactions', {
+      const res = await fetch(`${API_BASE_URL}/api/wallet/transactions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw await res.json();
@@ -42,7 +38,12 @@ const WalletPage = () => {
     } catch (err) {
       alert('Erreur chargement historique : ' + (err.error || 'inconnue'));
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchWalletInfo();
+    fetchTransactions();
+  }, [fetchWalletInfo, fetchTransactions]);
 
   return (
     <div className="wallet-container">

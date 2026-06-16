@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NewTontinePage.css';
+import API_BASE_URL from '../config/api';
 
 const CreateTontinePage = () => {
   const [tontineName, setTontineName] = useState('');
@@ -34,7 +35,7 @@ const CreateTontinePage = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8030/api/tontine/create', {
+      const response = await fetch(`${API_BASE_URL}/api/tontine/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ const CreateTontinePage = () => {
         // Succès
         setSuccessMessage(` ${data.message}`);
         setTimeout(() => {
-          navigate('/tontine');
+          navigate(`/tontine/${data.tontineId}`);
         }, 5000); // Redirection après 5 secondes
       }
     } catch (err) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './TontinePage.css';
+import API_BASE_URL from '../config/api';
 
 const TontinePage = () => {
   const { id } = useParams();
@@ -18,7 +19,7 @@ const TontinePage = () => {
     const fetchTontineData = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8030/api/tontine-details/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/tontine-details/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -34,7 +35,7 @@ const TontinePage = () => {
         // Initialize messages with participants
         const initialMessages = { group: [] };
         data.participants.forEach(participant => {
-          initialMessages[participant.id] = [];
+          initialMessages[participant.user_id] = [];
         });
         setMessages(initialMessages);
 
@@ -54,7 +55,7 @@ const TontinePage = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:8030/api/tontine-details/send-group-message', {
+      const response = await fetch(`${API_BASE_URL}/api/tontine-details/send-group-message`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,8 +71,6 @@ const TontinePage = () => {
         throw new Error('Erreur lors de l\'envoi du message');
       }
 
-      const data = await response.json();
-      
       // Update local state
       setMessages(prev => ({
         ...prev,
@@ -90,7 +89,7 @@ const TontinePage = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:8030/api/tontine-details/warn-participant', {
+      const response = await fetch(`${API_BASE_URL}/api/tontine-details/warn-participant`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +121,7 @@ const TontinePage = () => {
   const handleRequest = async (requestId, action) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:8030/api/tontine-details/handle-request', {
+      const response = await fetch(`${API_BASE_URL}/api/tontine-details/handle-request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +138,7 @@ const TontinePage = () => {
       }
 
       // Refresh tontine data
-      const updatedResponse = await fetch(`http://localhost:8030/api/tontine-details/${id}`, {
+      const updatedResponse = await fetch(`${API_BASE_URL}/api/tontine-details/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -152,10 +151,11 @@ const TontinePage = () => {
   };
 
   // Handle updating beneficiary order
+  // eslint-disable-next-line no-unused-vars
   const updateBeneficiaryOrder = async (newOrder) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:8030/api/tontine-details/update-beneficiary-order', {
+      const response = await fetch(`${API_BASE_URL}/api/tontine-details/update-beneficiary-order`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ const TontinePage = () => {
       }
 
       // Refresh tontine data
-      const updatedResponse = await fetch(`http://localhost:8030/api/tontine-details/${id}`, {
+      const updatedResponse = await fetch(`${API_BASE_URL}/api/tontine-details/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -188,7 +188,7 @@ const TontinePage = () => {
   const removeParticipant = async (userId) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:8030/api/tontine-details/remove-participant', {
+      const response = await fetch(`${API_BASE_URL}/api/tontine-details/remove-participant`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -205,7 +205,7 @@ const TontinePage = () => {
       }
 
       // Refresh tontine data
-      const updatedResponse = await fetch(`http://localhost:8030/api/tontine-details/${id}`, {
+      const updatedResponse = await fetch(`${API_BASE_URL}/api/tontine-details/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -222,7 +222,7 @@ const TontinePage = () => {
     const fetchMessages = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8030/api/tontine-details/group-messages/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/tontine-details/group-messages/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -357,7 +357,7 @@ const TontinePage = () => {
               placeholder="Votre message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
             />
             <button className="send-button" onClick={handleSendMessage}>
               ➤
@@ -391,7 +391,7 @@ const TontinePage = () => {
         <div className="card">
           <h2>Demandes en attente</h2>
           {tontineData.pendingRequests.map((request) => (
-            <div key={request.id} className="member-row">
+            <div key={request.request_id} className="member-row">
               <div className="member-info">
                 <div className="avatar">
                   {request.first_name.charAt(0)}{request.last_name.charAt(0)}
@@ -401,13 +401,13 @@ const TontinePage = () => {
               <div>
                 <button 
                   className="accept" 
-                  onClick={() => handleRequest(request.id, 'accept')}
+                  onClick={() => handleRequest(request.request_id, 'accept')}
                 >
                   Accepter
                 </button>
                 <button 
                   className="reject" 
-                  onClick={() => handleRequest(request.id, 'reject')}
+                  onClick={() => handleRequest(request.request_id, 'reject')}
                 >
                   Refuser
                 </button>

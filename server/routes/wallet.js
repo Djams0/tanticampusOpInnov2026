@@ -51,6 +51,39 @@ router.get('/transactions', authenticateToken, async (req, res) => {
   }
 });
 
+// Cotisations dues par l'utilisateur pour les cycles actifs.
+router.get('/contributions', authenticateToken, async (req, res) => {
+  try {
+    const [contributions] = await db.query(
+      `SELECT
+        t.tontine_id AS id,
+        t.title AS nom,
+        t.contribution_amount AS montant,
+        COALESCE(tc.start_date, t.start_date) AS echeance
+       FROM tontines t
+       JOIN tontine_participants tp ON tp.tontine_id = t.tontine_id
+       LEFT JOIN tontine_cycles tc
+        ON tc.tontine_id = t.tontine_id AND tc.status = 'active'
+       LEFT JOIN transactions tr
+        ON tr.tontine_id = t.tontine_id
+        AND tr.user_id = ?
+        AND tr.type = 'contribution'
+        AND (tc.cycle_id IS NULL OR tr.transaction_date >= tc.start_date)
+       WHERE tp.user_id = ?
+        AND tp.is_active = 1
+        AND t.status = 'active'
+        AND tr.transaction_id IS NULL
+       ORDER BY echeance ASC`,
+      [req.user.id, req.user.id]
+    );
+
+    res.json(contributions);
+  } catch (err) {
+    console.error('Erreur cotisations:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
 // Dépôt d'argent
 router.post('/deposit', authenticateToken, async (req, res) => {
   const { amount } = req.body;
@@ -136,7 +169,7 @@ router.post('/withdraw', authenticateToken, async (req, res) => {
 
 // Paiement d'une cotisation
 router.post('/pay-contribution', authenticateToken, async (req, res) => {
-  const { tontine_id } = req.body;
+  const tontine_id = req.body.tontine_id || req.body.tontineId;
 
   if (!tontine_id) {
     return res.status(400).json({ error: 'ID de tontine requis' });
@@ -273,8 +306,8 @@ router.post('/pay-contribution', authenticateToken, async (req, res) => {
 
         await connection.query(
           `INSERT INTO tontine_cycles 
-           (tontine_id, start_date, status, amount_per_participant) 
-           VALUES (?, NOW(), 'active', ?)`,
+           (tontine_id, start_date, status, amount_per_participant, total_amount) 
+           VALUES (?, NOW(), 'active', ?, 0)`,
           [tontine_id, tontine.contribution_amount]
         );
 

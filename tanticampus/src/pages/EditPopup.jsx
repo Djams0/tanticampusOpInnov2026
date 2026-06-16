@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./EditPopup.css";
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 
 const EditPopup = ({ field, onClose, onSave }) => {
   const [inputValue, setInputValue] = useState(field.value || "");
@@ -15,7 +16,6 @@ const EditPopup = ({ field, onClose, onSave }) => {
     setError("");
     setSuccess("");
 
-    // Validation mot de passe
     if (isPasswordField && inputValue !== confirmPassword) {
       setError("Les mots de passe ne correspondent pas.");
       return;
@@ -24,27 +24,27 @@ const EditPopup = ({ field, onClose, onSave }) => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
-        setError("Utilisateur non authentifié.");
+        setError("Utilisateur non authentifie.");
         return;
       }
 
       const payload = {};
       payload[field.field] = inputValue;
 
-      await axios.put("http://localhost:8030/api/user/profile", payload, {
+      const response = await axios.put(`${API_BASE_URL}/api/user/profile`, payload, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
 
-      setSuccess("Mise à jour réussie.");
-      onSave(inputValue);
+      setSuccess("Mise a jour reussie.");
+      onSave(response.data.user);
     } catch (err) {
-      console.error("Erreur lors de la mise à jour :", err);
+      console.error("Erreur lors de la mise a jour :", err);
       if (err.response) {
         setError(`Erreur ${err.response.status} : ${err.response.data.error || "Erreur inconnue."}`);
       } else {
-        setError("Erreur réseau ou inattendue.");
+        setError("Erreur reseau ou inattendue.");
       }
     }
   };

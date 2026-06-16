@@ -232,7 +232,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `student_id` (`student_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -240,7 +241,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `password_hash`, `phone_number`, `date_of_birth`, `university`, `student_id`, `is_verified`, `verification_document`, `trust_score`, `score_last_updated`, `wallet_balance`, `last_activity_at`, `is_banned`, `created_at`, `updated_at`) VALUES
-(1, 'Mansour Djamil', 'Ndiaye', 'mansourdjamil14@gmail.com', '$2b$10$593KphZ1UM7P2x6LQL4Mcu/65Q5sCn6TmQrWKEtcns2fFqK8wZihC', NULL, NULL, 'EPSI-Paris', '01', 0, NULL, 100, '2025-07-04 11:24:10', 1050.00, '2025-07-04 13:24:10', 0, '2025-07-04 11:24:10', '2025-07-06 15:17:33');
+(1, 'Demo', 'Etudiant', 'demo@tonticampus.local', '$2b$10$593KphZ1UM7P2x6LQL4Mcu/65Q5sCn6TmQrWKEtcns2fFqK8wZihC', NULL, NULL, 'EPSI-Paris', 'DEMO-001', 0, NULL, 100, '2025-07-04 11:24:10', 1050.00, '2025-07-04 13:24:10', 0, '2025-07-04 11:24:10', '2025-07-06 15:17:33');
 
 --
 -- Contraintes pour les tables déchargées
